@@ -7,6 +7,7 @@ import consul.v1.common.ConsulRequestBasics._
 import consul.v1.common.{Service, Types}
 import consul.v1.common.Types._
 import consul.v1.health.Check
+import consul.v1.ws.WSProvider
 import play.api.http.Status
 import play.api.libs.json.{JsNull, JsObject}
 import play.api.libs.ws.WSRequestHolder
@@ -30,7 +31,7 @@ trait AgentRequests {
 
 object AgentRequests {
 
-  def apply(basePath: String)(implicit executionContext: ExecutionContext): AgentRequests = new AgentRequests {
+  def apply(basePath: String)(implicit executionContext: ExecutionContext, wsProvider: WSProvider): AgentRequests = new AgentRequests {
 
     def self() = erased(
       jsonRequestMaker(fullPathFor("self"), _.get())(_.validate[JsObject])

@@ -11,6 +11,7 @@ import consul.v1.health.HealthRequests
 import consul.v1.kv.KvRequests
 import consul.v1.session.SessionRequests
 import consul.v1.status.StatusRequests
+import consul.v1.ws.WSProvider
 
 import scala.concurrent.ExecutionContext
 
@@ -26,7 +27,7 @@ trait ConsulApiV1{
 
 }
 
-class Consul(address: Inet4Address, port: Int = 8500)(implicit executionContext: ExecutionContext){
+class Consul(address: Inet4Address, port: Int = 8500)(implicit executionContext: ExecutionContext, wSProvider: WSProvider){
 
   lazy val v1: ConsulApiV1 with Types = new ConsulApiV1 with Types{
     private lazy val basePath = s"http://${address.getHostAddress}:$port/v1"

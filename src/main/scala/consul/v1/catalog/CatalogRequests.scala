@@ -4,6 +4,7 @@ import consul.v1.common.CheckStatus._
 import consul.v1.common.ConsulRequestBasics._
 import consul.v1.common.Types._
 import consul.v1.common.{Node, Types}
+import consul.v1.ws.WSProvider
 import play.api.http.Status
 import play.api.libs.json._
 import play.api.libs.ws.WSRequestHolder
@@ -52,7 +53,7 @@ object CatalogRequests {
     Json.writes[Registerable]
   }
 
-  def apply(basePath: String)(implicit executionContext: ExecutionContext): CatalogRequests = new CatalogRequests {
+  def apply(basePath: String)(implicit executionContext: ExecutionContext, wsProvider: WSProvider): CatalogRequests = new CatalogRequests {
 
     def register(registerable: Registerable): Future[Boolean] = responseStatusRequestMaker(
       registerPath,

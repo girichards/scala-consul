@@ -3,6 +3,7 @@ package consul.v1.health
 import consul.v1.common.CheckStatus.CheckStatus
 import consul.v1.common.ConsulRequestBasics._
 import consul.v1.common.Types.{NodeId, ServiceType,ServiceTag,DatacenterId}
+import consul.v1.ws.WSProvider
 import play.api.libs.json.{Json, Reads}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -18,7 +19,7 @@ object HealthRequests {
 
   implicit private val NodesHealthServiceReads: Reads[NodesHealthService] = Json.reads[NodesHealthService]
 
-  def apply(basePath: String)(implicit executionContext: ExecutionContext): HealthRequests = new HealthRequests {
+  def apply(basePath: String)(implicit executionContext: ExecutionContext, wsProvider: WSProvider): HealthRequests = new HealthRequests {
 
     def service(service: ServiceType, tag:Option[ServiceTag], passing:Boolean=false,dc:Option[DatacenterId]): Future[Seq[NodesHealthService]] = erased{
       lazy val params = (if(passing) List(("passing","")) else List.empty ) ++ tag.map{ case tag => (("tag",tag.toString)) }

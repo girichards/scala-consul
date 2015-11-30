@@ -3,6 +3,7 @@ package consul.v1.agent.service
 import consul.v1.agent.service.LocalService.{apply => applied}
 import consul.v1.common.ConsulRequestBasics._
 import consul.v1.common.Types._
+import consul.v1.ws.WSProvider
 import play.api.http.Status
 import play.api.libs.json.{JsNull, Json, Writes}
 
@@ -28,7 +29,7 @@ object ServiceRequests {
 
   private implicit lazy val CheckWrites: Writes[Check] = Json.writes[Check]
 
-  def apply(basePath: String)(implicit executionContext: ExecutionContext): ServiceRequests = new ServiceRequests{
+  def apply(basePath: String)(implicit executionContext: ExecutionContext, wsProvider: WSProvider): ServiceRequests = new ServiceRequests{
 
     def maintenance(serviceID: ServiceId,enable:Boolean,reason:Option[String]): Future[Boolean] = {
       lazy val params = Seq(("enable",enable.toString)) ++ reason.map("reason"->_)

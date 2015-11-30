@@ -2,6 +2,7 @@ package consul.v1.session
 
 import consul.v1.common.ConsulRequestBasics._
 import consul.v1.common.Types._
+import consul.v1.ws.WSProvider
 import play.api.http.Status
 import play.api.libs.json.Json
 
@@ -30,7 +31,7 @@ object SessionRequests{
   private lazy implicit val SessionInfoReads     = Json.reads[SessionInfo]
   private lazy implicit val SessionDefWrites     = Json.writes[SessionDef]
 
-  def apply(basePath: String)(implicit executionContext: ExecutionContext): SessionRequests = new SessionRequests{
+  def apply(basePath: String)(implicit executionContext: ExecutionContext, wsProvider: WSProvider): SessionRequests = new SessionRequests{
 
     def create(sessionDef: SessionDef,dc:Option[DatacenterId]): Future[SessionIDHolder] = erased(
       jsonDcRequestMaker(
